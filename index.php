@@ -10,16 +10,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $password = $_POST["password"] ?? "";
 
     if (!empty($email) && !empty($password)) {
-        // --- Select the row by username ---
-        $stmt = $conn->prepare("SELECT Email, Password, FirstName, LastName FROM users WHERE Email = ?");
+
+    $stmt = $conn->prepare("SELECT Email, Password, FirstName, LastName FROM users WHERE Email = ?");
         $stmt->execute([$email]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        echo '<pre>';
-        print_r($user);
-        echo '</pre>'; 
-        // --- Verify password ---
+
         if ($user && password_verify($password, $user["Password"])) {
-            $successMessage = "Hello " . htmlspecialchars($user["FirstName"])  .  htmlspecialchars($user["lastName"]);
+            $successMessage = "Hello " . htmlspecialchars($user["FirstName"])  .  htmlspecialchars($user["LastName"]);
         } else {
             $error = "Invalid username or password.";
         }
