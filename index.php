@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user && password_verify($password, $user["Password"])) {
-            $successMessage = "Hello " . htmlspecialchars($user["FirstName"])  .  htmlspecialchars($user["LastName"]);
+            $successMessage = "Hello " . htmlspecialchars($user["FirstName"]) . " " . htmlspecialchars($user["LastName"]);
         } else {
             $error = "Invalid username or password.";
         }
@@ -64,10 +64,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 <button type="submit" class="btn btn-primary w-100">Sign in</button>
             </form>
-
-            <p class="text-center mt-3 mb-0">
-                Don't have an account? <a href="index.php">Create one</a>
-            </p>
         </div>
     </div>
 
