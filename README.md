@@ -1,24 +1,23 @@
 # RegisterForm
 
-Simple PHP login/demo using PDO + MySQL and Bootstrap 5.
+A simple PHP login demo with session-based dashboard access using PDO and Bootstrap 5.
 
-## Files
+## Project files
 
-- `index.php` — login form and authentication (stores user data in `$_SESSION`)
-- `connection.php` — PDO database connection
-- `dashboard.php` — protected dashboard that reads user info from session
-- `logout.php` — (recommended) logout handler that destroys the session
-
+- `index.php` — login page and authentication logic
+- `connection.php` — PDO database connection setup
+- `dashboard.php` — protected dashboard page that displays the logged-in user
+- `logout.php` — logout handler to clear the session and redirect to login
 
 ## Requirements
 
-- PHP 7.4+ with PDO and PDO MySQL
-- MySQL / MariaDB
-- XAMPP or similar local development stack
+- PHP 7.4 or newer with PDO and PDO MySQL enabled
+- MySQL or MariaDB
+- XAMPP, WAMP, or another local PHP web server stack
 
 ## Database setup
 
-1. Create a database and `users` table. Example:
+1. Create the database and `users` table:
 
 ```sql
 CREATE DATABASE users;
@@ -33,54 +32,52 @@ CREATE TABLE users (
 );
 ```
 
-2. Create a test user and store a PHP password hash in `Password`:
+2. Create a test user and store a password hash:
 
 ```php
 <?php
 echo password_hash('your-password', PASSWORD_DEFAULT);
 ```
 
-Insert the generated hash into the `Password` column for your test row.
+Copy the generated hash into the `Password` column for your user row.
 
 ## Configuration
 
-Edit `connection.php` to match your database credentials:
+Update `connection.php` if your database credentials differ:
 
 ```php
-$host = 'localhost';
-$username = 'root';
-$password = '';
-$dbname = 'users';
+$host = "localhost";
+$username = "root";
+$password = "";
+$dbname = "users";
 ```
 
 ## How it works
 
-- `index.php` validates credentials and on success:
-  - regenerates the session id (`session_regenerate_id(true)`) to prevent fixation
-  - stores minimal user data in `$_SESSION` (id, email, first, last)
-  - redirects to `dashboard.php` (relative path)
-- `dashboard.php` checks `$_SESSION['user_id']` and redirects to `index.php` if not authenticated
-- Logout is handled via a POST form that clears `$_SESSION`, destroys the session cookie, and calls `session_destroy()` before redirecting to the login page
+- `index.php` accepts email and password input.
+- It looks up the user record by email using PDO prepared statements.
+- If the user exists and `password_verify()` succeeds, the script starts a session and stores minimal user data in `$_SESSION`.
+- The user is redirected to `dashboard.php`.
+- `dashboard.php` displays the user name and includes a logout form.
+- `logout.php` clears session data, destroys the session cookie, and redirects back to `index.php`.
 
-## UI / Design
+## Notes on the current implementation
 
-- Pages use Bootstrap 5 utilities for layout and components — no extra frameworks required
- 
-
-## Security notes
-
-- Never store plaintext passwords — always store `password_hash()` output and verify with `password_verify()`.
-- Regenerate session id after login and clear/destroy session on logout.
-- Use POST for logout to avoid state-changing GET requests.
+- `connection.php` creates a PDO connection with `ERRMODE_EXCEPTION` and `FETCH_ASSOC`.
+- `index.php` stores `user_id`, `user_firstName`, `user_lastName`, and `user_email` in session.
+- `dashboard.php` reads the stored session values and displays the user name.
+- The UI uses Bootstrap 5 card layout and form styling.
+- Logout is implemented through a POST form to clear the active session.
 
 ## Quick start
 
-1. Place the project folder in your web root (e.g., `htdocs/Projects/registerForm`).
-2. Start Apache and MySQL through XAMPP.
-3. Visit `http://localhost/Projects/registerForm/index.php` and sign in with your test user.
+1. Place the project directory under your web server root, e.g. `htdocs/Projects/registerForm`.
+2. Start Apache and MySQL from XAMPP.
+3. Open `http://localhost/Projects/registerForm/index.php` in your browser.
+4. Sign in using a test user whose password is hashed in the database.
 
-## Next steps
+## Recommendations
 
-- Add `logout.php` endpoint if you prefer a dedicated file for logout behavior.
-- Add input sanitization and stronger validation as needed for production.
-- Consider HTTPS and secure cookie flags for deployment.
+- Use `password_hash()` when inserting new users.
+- Keep the session flow secure by avoiding password storage in session.
+- Consider adding input validation and a dedicated login/logout controller for production.
