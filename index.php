@@ -1,7 +1,6 @@
 <?php
 require_once "connection.php";
 
-
 $error = "";
 $email = "";
 $password = "";

@@ -1,8 +1,6 @@
 <?php
 if (empty($_SESSION['user_id'])) { header('Location: index.php'); exit; }
 
-$userName = $_SESSION["user_firstName"] . " " . $_SESSION["user_lastName"];
-
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 

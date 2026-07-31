@@ -23,6 +23,5 @@ if ($conn === null) {
     }
 }
 
-return $conn;
 
 ?>
