@@ -20,6 +20,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     session_destroy();
-    header("Location: http://localhost/projects/registerForm/index.php");
+    header("Location: http://localhost/projects/Login%20form/index.php");
     exit;
 }

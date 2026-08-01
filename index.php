@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION["user_lastName"] = $user["LastName"];
             $_SESSION["user_email"] = $user["Email"];
             
-            header("Location: http://localhost/projects/registerForm/dashboard.php");
+            header("Location: http://localhost/projects/Login%20form/dashboard.php");
             exit;
         } else {
             $error = "Invalid username or password.";
